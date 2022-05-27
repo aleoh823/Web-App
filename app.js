@@ -1,8 +1,8 @@
 //set up the server
 const express = require( "express" );
 const res = require("express/lib/response");
+const db = require('./db/db_pool');
 const logger = require("morgan");
-const db = require('./db/db_connection');
 const app = express();
 const port = 8080;
 
@@ -10,8 +10,9 @@ const port = 8080;
 app.set( "views",  __dirname + "/views");
 app.set( "view engine", "ejs" );
 
-//configure expreess to parse URL-encoded POST request bodies (traditional forms)
-app.use( express.urlencoded({extended: false}));
+// Configure Express to parse URL-encoded POST request bodies (traditional forms)
+app.use( express.urlencoded({ extended: false }) );
+
 //defining middleware that logs all incoming requests.
 app.use(logger("dev"));
 
@@ -61,68 +62,62 @@ app.get( "/skillset/report/:id", ( req, res ) => {
     });
 });
 
-// const delete_stuff_sql = 
-// `
-//     DELETE
-//     FROM
-//         stuff
-//     WHERE
-//         id = ?
-// `
-// app.get("/stuff/item:id/delete", (req, res) => {
-//     db.execute(delete_stuff_sql, [req.params.id], (error, results) => {
-//         if(error)
-//             res.status(500).send(error);
-//         else {
-//             res.redirect("/stuff");
-//         }
-//     })
-// })
+// define a route for item DELETE
+const delete_technique_sql = `
+    DELETE 
+    FROM
+        technique
+    WHERE
+        id = ?
+`
+app.get("/skillset/report/:id/delete", ( req, res ) => {
+    db.execute(delete_technique_sql, [req.params.id], (error, results) => {
+        if (error)
+            res.status(500).send(error); //Internal Server Error
+        else {
+            res.redirect("/skillset");
+        }
+    });
+})
 
-// const insert_stuff_sql = '
-// INSERT INTO stuff
-//     (item, quantity)
-// VALUES
-//     (?,?)
-// '
+// define a route for item Create
+const create_technique_sql = `
+    INSERT INTO technique
+        (technique, mastered)
+    VALUES
+        (?, ?)
+`
+app.post("/skillset", ( req, res ) => {
+    db.execute(create_technique_sql, [req.body.technique, req.body.mastered], (error, results) => {
+        if (error)
+            res.status(500).send(error); //Internal Server Error
+        else {
+            //results.insertId has the primary key (id) of the newly inserted element.
+            res.redirect(`/skillset/report/${results.insertId}`);
+        }
+    });
+})
 
-
-// app.post("/stuff", (req,res) => {
-//     //to get the form input values:
-//     //req.body.name
-//     //req,body.quantity
-//     db.execute(create_item_sql, [req.body.name, req.body.quantity], (error , results) => {
-//         if(error) 
-//             res.status(500).send(error); //Internal Server Error
-//         else {
-//             res.redirect('/stuff');
-//         }
-//     })
-// })
-
-// const updatee_iten_sql = '
-//     UPDATE 
-//         stuff
-//     SET
-//         technique = ?,
-//         mastery = ?,
-//         description = ?
-//     WHERE  
-//         id = ?
-// '
-// app.post("/stuff/item/:id", (reequ, res) => {
-//     //req.params.id
-//     //to get the form input values:
-//     //req.body.name
-//     //req.body.quantity
-//     //req.body.description
-//     db.executee(update_item_sql, [req.body.name, req.body.quantity, req.body.description, req.params.id], (req, res) => {
-//         if(error)
-//             res.status(500).setDefaultEncoding(error); //Internal Server Error
-//         else {
-//             res.redirect('/stuff/item/${req.params.id}');
-//         })
-// })
+// define a route for item UPDATE
+const update_skillset_sql = `
+    UPDATE
+        technique
+    SET
+        technique = ?,
+        mastered = ?,
+        progress_report = ?
+    WHERE
+        id = ?
+`
+app.post("/skillset/report/:id", ( req, res ) => {
+    db.execute(update_skillset_sql, [req.body.technique, req.body.mastered, req.body.progress_report, req.params.id], (error, results) => {
+        if (error)
+            res.status(500).send(error); //Internal Server Error
+        else {
+            res.redirect(`/skillset/report/${req.params.id}`);
+        }
+    });
+})
 
 // start the server
 app.listen( port, () => {
@@ -130,3 +125,4 @@ app.listen( port, () => {
 } );
 
 //npm start
+//npm run devstart

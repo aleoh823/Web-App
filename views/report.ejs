@@ -57,7 +57,7 @@
             <a class="btn-large waves-effect waves-light orange left modal-trigger" href="/skillset">
                 <i class="material-icons right">edit</i>Edit
             </a>
-            <a class="btn-large waves-effect waves-light red right">
+            <a class="btn-large waves-effect waves-light red right" href="/skillset/report/<%=id%>/delete">
                 <i class="material-icons right">delete</i>Delete
             </a>
         </div>
@@ -68,16 +68,16 @@
             <div class="modal-content">
 
                 <h2>Edit:</h2>
-                <form>
+                <form method="post" action="/skillset/report/<%= id%>">
                     <div class="row">
                         <div class="input-field col s6">
-                            <label for="name">Technique:</label>
-                            <input type="text" name="name" class="validate" data-length="32" required>
+                            <label for="technique">Technique:</label>
+                            <input type="text" name="technique" class="validate" data-length="32" required>
                         </div>
                     <div class="row">
                         <div class="input-field col s12">
-                            <label for="description">Progress Report:</label>
-                            <input type="text" name="description" data-length="100">
+                            <label for="progress_report">Progress Report:</label>
+                            <input type="text" name="progress_report" data-length="100">
                         </div>
                     </div>
                     <div class="modal-footer">
