@@ -3,8 +3,9 @@ const express = require( "express" );
 const res = require("express/lib/response");
 const db = require('./db/db_pool');
 const logger = require("morgan");
-const app = express();
-const port = 8080;
+const app = express();const dotenv = require('dotenv');
+dotenv.config();
+const port = process.env.PORT;
 
 // Configure Express to use EJS
 app.set( "views",  __dirname + "/views");
