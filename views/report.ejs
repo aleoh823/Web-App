@@ -54,7 +54,7 @@
         </div>
 
         <div class="section" id="stuffControls">
-            <a class="btn-large waves-effect waves-light orange left modal-trigger" href="/skillset">
+            <a class="btn-large waves-effect waves-light orange left modal-trigger" href="#stuffEdit">
                 <i class="material-icons right">edit</i>Edit
             </a>
             <a class="btn-large waves-effect waves-light red right" href="/skillset/report/<%=id%>/delete">
@@ -62,7 +62,9 @@
             </a>
         </div>
 
-
+        <a class="btn-large waves-effect waves-light blue left modal-trigger" href="/skillset">
+            Back
+        </a>
         <div class="modal" id="stuffEdit">
 
             <div class="modal-content">
@@ -80,6 +82,14 @@
                             <input type="text" name="progress_report" data-length="100">
                         </div>
                     </div>
+
+                    <div>
+                        <label>
+                          <input type="checkbox" name="mastered" id="masteredCheck" class="filled-in" />
+                          <span>Mastered</span>
+                        </label>
+                    </div>
+
                     <div class="modal-footer">
                         <button class="btn waves-effect waves-light " type="submit"><i
                                 class="material-icons right">send</i>Submit</button>

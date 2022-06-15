@@ -89,7 +89,12 @@ const create_technique_sql = `
         (?, ?)
 `
 app.post("/skillset", ( req, res ) => {
-    db.execute(create_technique_sql, [req.body.technique, req.body.mastered], (error, results) => {
+    console.log(req.body)
+    let mastered = 0;
+    if (req.body.mastered == "on") {
+        mastered = 1;
+    }
+    db.execute(create_technique_sql, [req.body.technique, mastered], (error, results) => {
         if (error)
             res.status(500).send(error); //Internal Server Error
         else {
@@ -111,7 +116,11 @@ const update_skillset_sql = `
         id = ?
 `
 app.post("/skillset/report/:id", ( req, res ) => {
-    db.execute(update_skillset_sql, [req.body.technique, req.body.mastered, req.body.progress_report, req.params.id], (error, results) => {
+    let mastered = 0;
+    if (req.body.mastered == "on") {
+        mastered = 1;
+    }
+    db.execute(update_skillset_sql, [req.body.technique, mastered, req.body.progress_report, req.params.id], (error, results) => {
         if (error)
             res.status(500).send(error); //Internal Server Error
         else {
